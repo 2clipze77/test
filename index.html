@@ -19,6 +19,24 @@
 			--mono: "DM Mono", monospace;
 			--sans: "Manrope", sans-serif;
 		}
+		:root[data-theme="dark"] {
+			--ink: #f2f0e9;
+			--muted: #9a9c94;
+			--paper: #17181a;
+			--lime: #d9ef58;
+			--coral: #ff8069;
+			--line: rgba(242, 240, 233, .16);
+		}
+		@media (prefers-color-scheme: dark) {
+			:root:not([data-theme="light"]) {
+				--ink: #f2f0e9;
+				--muted: #9a9c94;
+				--paper: #17181a;
+				--lime: #d9ef58;
+				--coral: #ff8069;
+				--line: rgba(242, 240, 233, .16);
+			}
+		}
 
 		* { box-sizing: border-box; }
 		html { scroll-behavior: smooth; }
@@ -28,9 +46,24 @@
 			background: var(--paper);
 			font-family: var(--sans);
 			overflow-x: hidden;
+			transition: background .25s, color .25s;
 		}
 		a { color: inherit; text-decoration: none; }
 		button { color: inherit; font: inherit; }
+		.theme-toggle {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			border: 1px solid var(--line);
+			border-radius: 999px;
+			padding: 6px 12px;
+			background: none;
+			font-family: var(--mono);
+			font-size: 11px;
+			cursor: pointer;
+			transition: border-color .2s;
+		}
+		.theme-toggle:hover { border-color: var(--ink); }
 		.site-header {
 			display: flex;
 			align-items: center;
@@ -60,7 +93,8 @@
 		.hero-intro strong { font-weight: 800; }
 		.portrait-wrap { position: relative; min-height: 670px; background: var(--coral); }
 		.portrait-wrap::before { content: "HAERIN"; position: absolute; top: 50%; left: -16%; z-index: 0; color: rgba(255,255,255,.26); font-size: 12vw; font-weight: 800; letter-spacing: -.08em; transform: rotate(-90deg); transform-origin: center; }
-		.portrait { width: 100%; height: 100%; min-height: 670px; object-fit: cover; object-position: center top; mix-blend-mode: multiply; filter: saturate(.9) contrast(1.06); }
+		.portrait { display: block; width: 100%; height: 100%; min-height: 670px; }
+		.portrait svg { display: block; width: 100%; height: 100%; }
 		.portrait-credit { position: absolute; right: 22px; bottom: 20px; color: white; font-family: var(--mono); font-size: 10px; writing-mode: vertical-rl; }
 		.scroll-note { position: absolute; bottom: 26px; left: 5vw; font-family: var(--mono); font-size: 10px; }
 		.scroll-note::after { content: "↓"; margin-left: 12px; color: var(--coral); font-size: 16px; }
@@ -83,7 +117,7 @@
 		.timeline-item p { max-width: 290px; margin: 0; font-size: 13px; line-height: 1.7; }
 		.number { font-family: var(--mono); font-size: 11px; }
 
-		.quote-section { display: grid; grid-template-columns: 1fr 1.5fr; gap: 8vw; align-items: center; background: var(--ink); color: var(--paper); }
+		.quote-section { display: grid; grid-template-columns: 1fr 1.5fr; gap: 8vw; align-items: center; background: #20211f; color: #f2f0e9; }
 		.quote-mark { color: var(--lime); font-size: 100px; line-height: .5; }
 		blockquote { margin: 0; font-size: clamp(30px, 4vw, 62px); font-weight: 600; letter-spacing: -.065em; line-height: 1.05; }
 		.quote-by { margin-top: 32px; color: #a8aaa2; font-family: var(--mono); font-size: 11px; }
@@ -124,6 +158,9 @@
 			<a href="#works">WORKS</a>
 			<a href="#note">NOTE</a>
 		</nav>
+		<button class="theme-toggle" id="themeToggle" type="button" aria-label="다크/화이트 모드 전환">
+			<span id="themeToggleLabel">DARK</span>
+		</button>
 		<button class="menu-button" type="button" aria-controls="nav" aria-expanded="false">MENU +</button>
 	</header>
 
@@ -135,8 +172,22 @@
 				<p class="hero-intro"><strong>강해린</strong>은 조용한 표정 안에 선명한 색을 가진 아티스트입니다. 섬세한 보컬과 독특한 분위기로 자신만의 장면을 만들어 갑니다.</p>
 			</div>
 			<div class="portrait-wrap">
-				<img class="portrait" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1100&q=85" alt="강해린을 연상시키는 인물 사진">
-				<span class="portrait-credit">VISUAL STUDY / UNSPLASH</span>
+				<div class="portrait" role="img" aria-label="해린의 시그니처인 고양이 눈매를 표현한 추상 그래픽">
+					<svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+						<defs>
+							<linearGradient id="portraitGradient" x1="0" y1="0" x2="1" y2="1">
+								<stop offset="0%" stop-color="#ff8069"/>
+								<stop offset="100%" stop-color="#d9ef58"/>
+							</linearGradient>
+						</defs>
+						<rect width="400" height="500" fill="url(#portraitGradient)"/>
+						<path d="M40 250 C 130 170, 270 170, 360 250 C 270 320, 130 320, 40 250 Z" fill="#20211f" opacity=".88"/>
+						<circle cx="145" cy="248" r="16" fill="#f2f0e9"/>
+						<circle cx="255" cy="248" r="16" fill="#f2f0e9"/>
+						<path d="M40 250 C 130 200, 270 200, 360 250" stroke="#f2f0e9" stroke-width="2" fill="none" opacity=".5"/>
+					</svg>
+				</div>
+				<span class="portrait-credit">ABSTRACT STUDY / NOT A PHOTOGRAPH</span>
 			</div>
 			<div class="scroll-note">SCROLL TO DISCOVER</div>
 		</section>
@@ -166,6 +217,32 @@
 	</main>
 	<footer><span>© 2026 HAERIN ARCHIVE</span><span>FAN-MADE INTRODUCTION</span></footer>
 	<script>
+		const root = document.documentElement;
+		const themeToggle = document.querySelector('#themeToggle');
+		const themeToggleLabel = document.querySelector('#themeToggleLabel');
+		const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+		function applyTheme(theme) {
+			if (theme) {
+				root.setAttribute('data-theme', theme);
+			} else {
+				root.removeAttribute('data-theme');
+			}
+			const isDark = theme ? theme === 'dark' : systemPrefersDark.matches;
+			themeToggleLabel.textContent = isDark ? 'LIGHT' : 'DARK';
+		}
+
+		const savedTheme = localStorage.getItem('theme');
+		applyTheme(savedTheme);
+
+		themeToggle.addEventListener('click', () => {
+			const isDark = root.getAttribute('data-theme') === 'dark'
+				|| (!root.getAttribute('data-theme') && systemPrefersDark.matches);
+			const nextTheme = isDark ? 'light' : 'dark';
+			localStorage.setItem('theme', nextTheme);
+			applyTheme(nextTheme);
+		});
+
 		const menuButton = document.querySelector('.menu-button');
 		const nav = document.querySelector('#nav');
 		menuButton.addEventListener('click', () => {
