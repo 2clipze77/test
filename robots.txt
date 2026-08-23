@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://2clipze77.github.io/test/sitemap.xml
